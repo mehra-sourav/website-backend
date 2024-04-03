@@ -54,7 +54,7 @@ const githubAuthCallback = (req, res, next) => {
         isMobileApp = true;
         redirectUrl.searchParams.delete("isMobileApp");
       }
-
+      console.log("redirectUrl====>", { redirectUrl, state: req.query.state });
       if (redirectUrl.searchParams.get("v2") === "true") isV2FlagPresent = true;
 
       if (`.${redirectUrl.hostname}`.endsWith(`.${rdsUiUrl.hostname}`)) {
@@ -84,7 +84,7 @@ const githubAuthCallback = (req, res, next) => {
       };
 
       const { userId, incompleteUserDetails, role } = await users.addOrUpdate(userData);
-
+      console.log("USERDATA===========>", { userData, incompleteUserDetails });
       const token = authService.generateAuthToken({ userId });
 
       const cookieOptions = {
@@ -102,7 +102,7 @@ const githubAuthCallback = (req, res, next) => {
         const tokenV2 = authService.generateAuthToken({ userId, role });
         res.cookie(config.get("userToken.cookieV2Name"), tokenV2, cookieOptions);
       }
-
+      console.log("devMode===========>", { devMode });
       if (!devMode) {
         // TODO: Revisit incompleteUserDetails redirect condition
         if (incompleteUserDetails) authRedirectionUrl = "https://my.realdevsquad.com/new-signup";

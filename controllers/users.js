@@ -372,6 +372,7 @@ const generateUsername = async (req, res) => {
 const getSelfDetails = async (req, res) => {
   try {
     if (req.userData) {
+      console.log("USERSELF ======>", req.userData);
       const user = await dataAccess.retrieveUsers({
         userdata: req.userData,
       });

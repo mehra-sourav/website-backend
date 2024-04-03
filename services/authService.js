@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
  * @return {String} - Generated JWT
  */
 const generateAuthToken = (payload) => {
+  console.log("PRIVATE KEY:", config.get("userToken.privateKey"));
   return jwt.sign(payload, config.get("userToken.privateKey"), {
     algorithm: "RS256",
     expiresIn: config.get("userToken.ttl"),

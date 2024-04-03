@@ -84,8 +84,9 @@ const githubAuthCallback = (req, res, next) => {
       };
 
       const { userId, incompleteUserDetails, role } = await users.addOrUpdate(userData);
-      console.log("USERDATA===========>", { userData, incompleteUserDetails });
+      console.log("USERDATA===========>", { userId: userId, userData, incompleteUserDetails });
       const token = authService.generateAuthToken({ userId });
+      console.log("USERDATA1,1===========>", { userId: userId, userData, incompleteUserDetails });
 
       const cookieOptions = {
         domain: rdsUiUrl.hostname,
@@ -94,6 +95,7 @@ const githubAuthCallback = (req, res, next) => {
         secure: true,
         sameSite: "lax",
       };
+      console.log("USERDATA 2===========>");
       // respond with a cookie
       res.cookie(config.get("userToken.cookieName"), token, cookieOptions);
 

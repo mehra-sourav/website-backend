@@ -19,6 +19,10 @@ module.exports = {
     __format: "boolean",
   },
 
+  cors: {
+    allowedOrigins: "CORS_ALLOWED_ORIGINS", // Allow requests from localhost:4200
+  },
+
   githubApi: {
     baseUrl: "GITHUB_API_BASE_URL",
     org: "GITHUB_ORGANISATION",

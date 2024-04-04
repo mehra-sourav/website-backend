@@ -42,8 +42,15 @@ const checkRestricted = async (req, res, next) => {
 module.exports = async (req, res, next) => {
   try {
     let token = req.cookies[config.get("userToken.cookieName")];
-    console.log("===>first condition", process.env.NODE_ENV !== "production" && !token);
-    console.log("token b4============>", { token, env: process.env.NODE_ENV, auth: req.headers.authorization });
+    console.log(
+      "authenticate middleware process.env.NODE_ENV !== 'production' && !token =====>",
+      process.env.NODE_ENV !== "production" && !token
+    );
+    console.log("auth middleware token from request cookie============>", {
+      token,
+      env: process.env.NODE_ENV,
+      auth: req.headers.authorization,
+    });
     /**
      * Enable Bearer Token authentication for NON-PRODUCTION environments
      * This is enabled as Swagger UI does not support cookie authe
@@ -52,11 +59,11 @@ module.exports = async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
     }
 
-    console.log("token after============>", { token, env: process.env.NODE_ENV });
+    console.log("auth middleware token from auth header============>", { token, env: process.env.NODE_ENV });
 
     const { userId } = authService.verifyAuthToken(token);
 
-    console.log("token after 2============>", { token, env: process.env.NODE_ENV });
+    console.log("auth middleware after verifying token============>", { token, env: process.env.NODE_ENV });
     // add user data to `req.userData` for further use
     const userData = await dataAccess.retrieveUsers({ id: userId });
     req.userData = userData.user;

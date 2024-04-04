@@ -54,7 +54,7 @@ const githubAuthCallback = (req, res, next) => {
         isMobileApp = true;
         redirectUrl.searchParams.delete("isMobileApp");
       }
-      console.log("redirectUrl====>", { redirectUrl, state: req.query.state });
+      console.log("In authCallback ====>", { redirectUrl, "req.query.state": req.query.state });
       if (redirectUrl.searchParams.get("v2") === "true") isV2FlagPresent = true;
 
       if (`.${redirectUrl.hostname}`.endsWith(`.${rdsUiUrl.hostname}`)) {
@@ -84,9 +84,13 @@ const githubAuthCallback = (req, res, next) => {
       };
 
       const { userId, incompleteUserDetails, role } = await users.addOrUpdate(userData);
-      console.log("USERDATA===========>", { userId: userId, userData, incompleteUserDetails });
+      console.log("AuthCallback authenticated USERdetails===========>", { userId, userData, incompleteUserDetails });
       const token = authService.generateAuthToken({ userId });
-      console.log("USERDATA1,1===========>", { userId: userId, userData, incompleteUserDetails });
+      console.log("AuthCallback authenticated USERdetails after token gen===========>", {
+        userId: userId,
+        userData,
+        incompleteUserDetails,
+      });
 
       const cookieOptions = {
         domain: rdsUiUrl.hostname,
@@ -95,7 +99,7 @@ const githubAuthCallback = (req, res, next) => {
         secure: true,
         sameSite: "lax",
       };
-      console.log("USERDATA 2===========>");
+      console.log("cookieoptions after token gen===========>", cookieOptions);
       // respond with a cookie
       res.cookie(config.get("userToken.cookieName"), token, cookieOptions);
 

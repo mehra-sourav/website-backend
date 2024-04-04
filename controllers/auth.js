@@ -99,20 +99,24 @@ const githubAuthCallback = (req, res, next) => {
         secure: true,
         sameSite: "lax",
       };
-      console.log("cookieoptions after token gen===========>", cookieOptions);
       // respond with a cookie
       res.cookie(config.get("userToken.cookieName"), token, cookieOptions);
+      console.log("cookieoptions after token gen===========>", {
+        cookieOptions,
+        cookiename: config.get("userToken.cookieName"),
+        token,
+      });
 
       /* redirectUrl woud be like https://realdevsquad.com?v2=true */
       if (isV2FlagPresent) {
         const tokenV2 = authService.generateAuthToken({ userId, role });
         res.cookie(config.get("userToken.cookieV2Name"), tokenV2, cookieOptions);
       }
-      console.log("devMode===========>", { devMode });
       if (!devMode) {
         // TODO: Revisit incompleteUserDetails redirect condition
         if (incompleteUserDetails) authRedirectionUrl = "https://my.realdevsquad.com/new-signup";
       }
+      console.log("devMode===========>", { devMode, authRedirectionUrl });
 
       if (isMobileApp) {
         const newUrl = new URL(authRedirectionUrl);
